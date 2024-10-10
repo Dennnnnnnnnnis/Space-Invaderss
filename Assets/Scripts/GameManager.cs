@@ -13,7 +13,11 @@ public class GameManager : MonoBehaviour
     private MysteryShip mysteryShip;
     private Bunker[] bunkers;
 
+    [SerializeField] ParticleSystem deathParticles;
+
     private float shkTime, shkMag, shkDrop;
+    private float freezeTime = 0;
+    private List<Invader> deactivationList = new List<Invader>();
 
     //Används ej just nu, men ni kan använda de senare
     public int score { get; private set; } = 0;
@@ -58,14 +62,26 @@ public class GameManager : MonoBehaviour
 
         if(shkTime > 0)
         {
-            shkTime -= Time.deltaTime;
+            shkTime -= Time.unscaledDeltaTime;
 
             if(shkTime > 0)
                 transform.position = new Vector3(Random.Range(-shkMag, shkMag), Random.Range(-shkMag, shkMag), -10);
             else
                 transform.position = new Vector3(0, 0, -10);
 
-            shkMag -= shkDrop * Time.deltaTime;
+            shkMag -= shkDrop * Time.unscaledDeltaTime;
+        }
+
+        if (freezeTime > 0)
+        {
+            Time.timeScale = 0;
+            freezeTime -= Time.unscaledDeltaTime;
+        }
+        else
+        {
+            Time.timeScale = 1;
+            if (deactivationList.Count != 0)
+                KillDueInvaders();
         }
     }
 
@@ -122,9 +138,21 @@ public class GameManager : MonoBehaviour
 
     public void OnInvaderKilled(Invader invader)
     {
-        invader.gameObject.SetActive(false);
+        deactivationList.Add(invader);
 
-       
+        Freeze(0.05f);
+        invader.Shake(0.05f, 0.2f, 0f);
+    }
+
+    void KillDueInvaders()
+    {
+        for(var i = 0; i < deactivationList.Count; i++)
+        {
+            Instantiate(deathParticles, deactivationList[0].transform.position, Quaternion.identity);
+
+            deactivationList[0].gameObject.SetActive(false);
+            deactivationList.RemoveAt(0);
+        }
 
         if (invaders.GetInvaderCount() == 0)
         {
@@ -154,5 +182,11 @@ public class GameManager : MonoBehaviour
             shkMag = shakeMagnitude;
             shkDrop = shakeDropoff;
         }
+    }
+
+    public void Freeze(float time)
+    {
+        if (time > freezeTime)
+            freezeTime = time;
     }
 }

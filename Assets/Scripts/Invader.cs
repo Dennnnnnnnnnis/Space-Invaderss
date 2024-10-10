@@ -12,8 +12,6 @@ public class Invader : MonoBehaviour
 {
     public Sprite[] animationSprites = new Sprite[2];
     public float animationTime;
-    [SerializeField]
-    ParticleSystem deathParticles;
 
     SpriteRenderer spRend;
     int animationFrame;
@@ -32,7 +30,6 @@ public class Invader : MonoBehaviour
     {
         //Anropar AnimateSprite med ett visst tidsintervall
         InvokeRepeating( nameof(AnimateSprite) , animationTime, animationTime);
-        deathParticles.Pause();
     }
 
     private void Update()
@@ -79,7 +76,6 @@ public class Invader : MonoBehaviour
     {
         if(collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
-            Instantiate(deathParticles, transform.position, Quaternion.identity);
             GameManager.Instance.OnInvaderKilled(this);
         }
         else if(collision.gameObject.layer == LayerMask.NameToLayer("Boundary")) //nått nedre kanten

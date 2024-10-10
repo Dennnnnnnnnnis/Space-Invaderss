@@ -22,14 +22,14 @@ public class Bunker : MonoBehaviour
     {
         if (shkTime > 0)
         {
-            shkTime -= Time.deltaTime;
+            shkTime -= Time.unscaledDeltaTime;
 
             if (shkTime > 0)
                 spRend.transform.localPosition = new Vector3(Random.Range(-shkMag, shkMag), Random.Range(-shkMag, shkMag));
             else
                 spRend.transform.localPosition = Vector3.zero;
 
-            shkMag -= shkDrop * Time.deltaTime;
+            shkMag -= shkDrop * Time.unscaledDeltaTime;
         }
     }
 
