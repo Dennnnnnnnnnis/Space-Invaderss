@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 {
     public Laser laserPrefab;
     Laser laser;
-    float speed = 5f;
+    [SerializeField] float speed = 5f;
 
     // Update is called once per frame
     void Update()

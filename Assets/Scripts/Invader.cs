@@ -6,7 +6,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(BoxCollider2D))]
-[RequireComponent(typeof(SpriteRenderer))]
+//[RequireComponent(typeof(SpriteRenderer))]
 
 public class Invader : MonoBehaviour
 {
@@ -15,11 +15,13 @@ public class Invader : MonoBehaviour
 
     SpriteRenderer spRend;
     int animationFrame;
-    // Start is called before the first frame update
+
+    float offsetTimer = 0;
+    private float shkTime, shkMag, shkDrop;
 
     private void Awake()
     {
-        spRend = GetComponent<SpriteRenderer>();
+        spRend = GetComponentInChildren<SpriteRenderer>();
         spRend.sprite = animationSprites[0];
     }
 
@@ -27,6 +29,29 @@ public class Invader : MonoBehaviour
     {
         //Anropar AnimateSprite med ett visst tidsintervall
         InvokeRepeating( nameof(AnimateSprite) , animationTime, animationTime);
+    }
+
+    private void Update()
+    {
+        if (shkTime > 0)
+        {
+            shkTime -= Time.deltaTime;
+
+            if (shkTime > 0)
+                spRend.transform.localPosition = new Vector3(Random.Range(-shkMag, shkMag), Random.Range(-shkMag, shkMag));
+            else
+                spRend.transform.localPosition = Vector3.zero;
+
+            shkMag -= shkDrop * Time.deltaTime;
+        }
+        else
+        {
+            offsetTimer += Time.deltaTime;
+            if (offsetTimer > 360f)
+                offsetTimer -= 360f;
+
+            spRend.transform.localPosition = Vector3.up * Mathf.Sin(offsetTimer) * 0.1f;
+        }
     }
 
     //pandlar mellan olika sprited för att skapa en animation
@@ -52,4 +77,13 @@ public class Invader : MonoBehaviour
         }
     }
 
+    public void Shake(float shakeTime, float shakeMagnitude, float shakeDropoff)
+    {
+        if (shkTime <= 0 || shakeMagnitude > shkMag)
+        {
+            shkTime = shakeTime;
+            shkMag = shakeMagnitude;
+            shkDrop = shakeDropoff;
+        }
+    }
 }

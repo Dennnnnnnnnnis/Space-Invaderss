@@ -10,6 +10,7 @@ public class Laser : Projectile
     private void Awake()
     {
         direction = Vector3.up;
+        GameManager.Instance.Shake(0.2f, 0.1f, 0.1f);
     }
 
     void Update()
