@@ -18,6 +18,7 @@ public class Invader : MonoBehaviour
 
     float offsetTimer = 0;
     private float shkTime, shkMag, shkDrop;
+    public float squash = 0f, targetSquash = 0f;
 
     private void Awake()
     {
@@ -51,6 +52,12 @@ public class Invader : MonoBehaviour
         else
         {
             spRend.transform.localPosition = Vector3.up * Mathf.Sin(offsetTimer) * 0.1f;
+        }
+
+        transform.localScale = new Vector3(squash > 0 ? Mathf.Abs(squash) + 1 : (1f / (Mathf.Abs(squash) + 1)), squash < 0 ? Mathf.Abs(squash) + 1 : (1f / (Mathf.Abs(squash) + 1)), 1);
+        if (squash != 0)
+        {
+            squash = Mathf.Max(Mathf.Abs(squash - targetSquash) - Time.deltaTime * 4f, 0) * Mathf.Sign(squash - targetSquash) + targetSquash;
         }
     }
 

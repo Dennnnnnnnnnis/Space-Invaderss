@@ -83,7 +83,9 @@ public class Invaders : MonoBehaviour
             if (rand < 0.2)
             {
                 Instantiate(missilePrefab, invader.position, Quaternion.identity);
-                invader.GetComponent<Invader>().Shake(0.1f, 0.1f, 1f);
+                Invader inv = invader.GetComponent<Invader>();
+                inv.Shake(0.1f, 0.1f, 1f);
+                inv.squash = 1f;
                 break;
             }
         }
