@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     private MysteryShip mysteryShip;
     private Bunker[] bunkers;
 
+    private float shkTime, shkMag, shkDrop;
+
     //Används ej just nu, men ni kan använda de senare
     public int score { get; private set; } = 0;
     public int lives { get; private set; } = 3;
@@ -52,6 +54,18 @@ public class GameManager : MonoBehaviour
         if (lives <= 0 && Input.GetKeyDown(KeyCode.Return))
         {
             NewGame();
+        }
+
+        if(shkTime > 0)
+        {
+            shkTime -= Time.deltaTime;
+
+            if(shkTime > 0)
+                transform.position = new Vector3(Random.Range(-shkMag, shkMag), Random.Range(-shkMag, shkMag), -10);
+            else
+                transform.position = new Vector3(0, 0, -10);
+
+            shkMag -= shkDrop * Time.deltaTime;
         }
     }
 
@@ -132,4 +146,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void Shake(float shakeTime, float shakeMagnitude, float shakeDropoff)
+    {
+        if(shkTime <= 0 || shakeMagnitude > shkMag)
+        {
+            shkTime = shakeTime;
+            shkMag = shakeMagnitude;
+            shkDrop = shakeDropoff;
+        }
+    }
 }
