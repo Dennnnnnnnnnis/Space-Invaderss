@@ -9,6 +9,8 @@ public class Bunker : MonoBehaviour
     int nrOfHits = 0;
     SpriteRenderer spRend;
     Color originalColor;
+    [SerializeField]
+    ParticleSystem impact;
 
     private float shkTime, shkMag, shkDrop;
 
@@ -38,6 +40,7 @@ public class Bunker : MonoBehaviour
        
         if (other.gameObject.layer == LayerMask.NameToLayer("Missile") || other.gameObject.layer == LayerMask.NameToLayer("Invader"))
         {
+            Instantiate(impact, other.gameObject.transform.position, Quaternion.identity);
             Shake(0.2f, 0.1f, 1f);
             //Ändrar färgen beroende på antal träffar.
             nrOfHits++;

@@ -183,11 +183,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1446096691350957288, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 0.35
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1446096691350957288, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1446096691350957288, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1446096691350957288, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1446096691350957288, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1446096691350957288, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4652714564497633110, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.14876768
+      value: 0.33100802
       objectReference: {fileID: 0}
     - target: {fileID: 4652714564497633110, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
       propertyPath: m_LocalScale.y
@@ -195,7 +215,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4652714564497633110, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.84745705
+      value: 1.8895892
       objectReference: {fileID: 0}
     - target: {fileID: 4652714564497633110, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
       propertyPath: m_LocalPosition.x
