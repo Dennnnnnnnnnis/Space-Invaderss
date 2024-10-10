@@ -33,6 +33,10 @@ public class Invader : MonoBehaviour
 
     private void Update()
     {
+        offsetTimer += Time.deltaTime * 3f;
+        if (offsetTimer > 360f)
+            offsetTimer -= 360f;
+
         if (shkTime > 0)
         {
             shkTime -= Time.deltaTime;
@@ -46,10 +50,6 @@ public class Invader : MonoBehaviour
         }
         else
         {
-            offsetTimer += Time.deltaTime;
-            if (offsetTimer > 360f)
-                offsetTimer -= 360f;
-
             spRend.transform.localPosition = Vector3.up * Mathf.Sin(offsetTimer) * 0.1f;
         }
     }

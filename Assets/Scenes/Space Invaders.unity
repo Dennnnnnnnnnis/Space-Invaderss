@@ -855,7 +855,7 @@ Transform:
   m_GameObject: {fileID: 954767098}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 8, z: 0}
+  m_LocalPosition: {x: 0, y: 7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -874,10 +874,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab:
-  - {fileID: 6388560444187469246, guid: d9c281899ca834f43ae14f3e7be8a1f3, type: 3}
-  - {fileID: 6388560444187469246, guid: d9c281899ca834f43ae14f3e7be8a1f3, type: 3}
-  - {fileID: 6388560444187469246, guid: d9c281899ca834f43ae14f3e7be8a1f3, type: 3}
-  - {fileID: 6388560444187469246, guid: d9c281899ca834f43ae14f3e7be8a1f3, type: 3}
+  - {fileID: 8691796331467230538, guid: f25addae2bddcb742b391a945a45f878, type: 3}
+  - {fileID: 8691796331467230538, guid: f25addae2bddcb742b391a945a45f878, type: 3}
+  - {fileID: -2873879725426160216, guid: fcea5c72361b66047873cd9dccacc37e, type: 3}
+  - {fileID: -2873879725426160216, guid: fcea5c72361b66047873cd9dccacc37e, type: 3}
   - {fileID: 6388560444187469246, guid: d9c281899ca834f43ae14f3e7be8a1f3, type: 3}
   missilePrefab: {fileID: -3797296427897721230, guid: 404a9ceef0a1c9c4c8926ecac22bb496, type: 3}
 --- !u!1 &1751774318
