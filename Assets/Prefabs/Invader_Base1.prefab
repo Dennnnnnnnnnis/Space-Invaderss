@@ -120,8 +120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationSprites:
-  - {fileID: 21300000, guid: b1c0835f9540c0740a66341c57f3f939, type: 3}
-  - {fileID: 21300000, guid: 24f3dfaab9d3114458e91f56871f0b01, type: 3}
+  - {fileID: 3927551135238410948, guid: aceac2425f171544abae056beb6f006f, type: 3}
+  - {fileID: 7148143269785829236, guid: aceac2425f171544abae056beb6f006f, type: 3}
   animationTime: 0.5
   squash: 0
   targetSquash: 0
@@ -152,7 +152,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 794959458561506865}
@@ -198,7 +198,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b1c0835f9540c0740a66341c57f3f939, type: 3}
+  m_Sprite: {fileID: 3927551135238410948, guid: aceac2425f171544abae056beb6f006f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
