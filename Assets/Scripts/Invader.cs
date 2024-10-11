@@ -24,6 +24,7 @@ public class Invader : MonoBehaviour
     {
         spRend = GetComponentInChildren<SpriteRenderer>();
         spRend.sprite = animationSprites[0];
+        offsetTimer += Random.Range(0f, 359f);
     }
 
     void Start()

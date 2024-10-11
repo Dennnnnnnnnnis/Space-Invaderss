@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     private Bunker[] bunkers;
 
     [SerializeField] ParticleSystem deathParticles;
+    [SerializeField] GameObject invaderDead;
 
     private float shkTime, shkMag, shkDrop;
     private float freezeTime = 0;
@@ -141,7 +142,7 @@ public class GameManager : MonoBehaviour
         deactivationList.Add(invader);
 
         Freeze(0.05f);
-        invader.Shake(0.05f, 0.2f, 0f);
+        invader.Shake(0.05f, 0.5f, 0f);
     }
 
     void KillDueInvaders()
@@ -149,6 +150,9 @@ public class GameManager : MonoBehaviour
         for(var i = 0; i < deactivationList.Count; i++)
         {
             Instantiate(deathParticles, deactivationList[0].transform.position, Quaternion.identity);
+
+            SpriteRenderer sr = Instantiate(invaderDead, deactivationList[0].transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
+            sr.sprite = deactivationList[0].GetComponentInChildren<SpriteRenderer>().sprite;
 
             deactivationList[0].gameObject.SetActive(false);
             deactivationList.RemoveAt(0);
