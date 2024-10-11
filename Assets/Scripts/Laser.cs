@@ -7,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Laser : Projectile
 {
+
     private void Awake()
     {
         direction = Vector3.up;
@@ -29,7 +30,16 @@ public class Laser : Projectile
 
         if(bunker == null) //Om det inte är en bunker vi träffat så ska skottet försvinna.
         {
-            Destroy(gameObject);
+            if(collision.gameObject.transform.tag == "Missile")
+            {
+                
+                Destroy(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
+
     }
 }

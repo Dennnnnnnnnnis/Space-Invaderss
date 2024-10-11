@@ -11,6 +11,8 @@ public class Bunker : MonoBehaviour
     Color originalColor;
     [SerializeField]
     ParticleSystem impact;
+    [SerializeField]
+    AudioSource impactSound;
 
     private float shkTime, shkMag, shkDrop;
 
@@ -40,6 +42,7 @@ public class Bunker : MonoBehaviour
        
         if (other.gameObject.layer == LayerMask.NameToLayer("Missile") || other.gameObject.layer == LayerMask.NameToLayer("Invader"))
         {
+            impactSound.Play();
             Instantiate(impact, other.gameObject.transform.position, Quaternion.identity);
             Shake(0.2f, 0.1f, 1f);
             //Ändrar färgen beroende på antal träffar.
