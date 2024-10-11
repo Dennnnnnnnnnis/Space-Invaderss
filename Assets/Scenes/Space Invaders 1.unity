@@ -230,6 +230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathParticles: {fileID: 6205160105307898208, guid: a4930e785acbb664d9dff80c99f7e46f, type: 3}
+  invaderDead: {fileID: 728037540862592844, guid: ff4f99057fffba244a41591b361f05a7, type: 3}
 --- !u!114 &226794206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562,6 +563,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laserPrefab: {fileID: -6925854217901669423, guid: c2bb9f3be01a9284fbf2078af0c5deb7, type: 3}
   speed: 8
+  squash: 0
+  targetSquash: 0
 --- !u!1001 &715339894
 PrefabInstance:
   m_ObjectHideFlags: 0
