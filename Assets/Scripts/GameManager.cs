@@ -155,6 +155,7 @@ public class GameManager : MonoBehaviour
 
             SpriteRenderer sr = Instantiate(invaderDead, deactivationList[0].transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
             sr.sprite = deactivationList[0].GetComponentInChildren<SpriteRenderer>().sprite;
+            sr.transform.localScale = deactivationList[0].GetComponentInChildren<SpriteRenderer>().transform.localScale;
 
             deactivationList[0].gameObject.SetActive(false);
             deactivationList.RemoveAt(0);

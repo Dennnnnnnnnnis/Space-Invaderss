@@ -15,6 +15,7 @@ public class Invader : MonoBehaviour
 
     SpriteRenderer spRend;
     int animationFrame;
+    [HideInInspector] public int facingDir = 1;
 
     float offsetTimer = 0;
     private float shkTime, shkMag, shkDrop;
@@ -55,7 +56,7 @@ public class Invader : MonoBehaviour
             spRend.transform.localPosition = Vector3.up * Mathf.Sin(offsetTimer) * 0.1f;
         }
 
-        transform.localScale = new Vector3(squash > 0 ? Mathf.Abs(squash) + 1 : (1f / (Mathf.Abs(squash) + 1)), squash < 0 ? Mathf.Abs(squash) + 1 : (1f / (Mathf.Abs(squash) + 1)), 1);
+        transform.localScale = new Vector3((squash > 0 ? Mathf.Abs(squash) + 1 : (1f / (Mathf.Abs(squash) + 1))) * facingDir, squash < 0 ? Mathf.Abs(squash) + 1 : (1f / (Mathf.Abs(squash) + 1)), 1);
         if (squash != 0)
         {
             squash = Mathf.Max(Mathf.Abs(squash - targetSquash) - Time.deltaTime * 4f, 0) * Mathf.Sign(squash - targetSquash) + targetSquash;

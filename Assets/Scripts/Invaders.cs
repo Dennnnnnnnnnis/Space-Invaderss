@@ -61,6 +61,7 @@ public class Invaders : MonoBehaviour
         foreach(Transform invader in transform)
         {
             invader.gameObject.SetActive(true);
+            invader.GetComponent<Invader>().facingDir = 1;
         }
     }
 
@@ -141,5 +142,10 @@ public class Invaders : MonoBehaviour
         Vector3 position = transform.position;
         position.y -= 1f;
         transform.position = position;
+
+        foreach (Transform invader in transform)
+        {
+            invader.GetComponent<Invader>().facingDir = Mathf.RoundToInt(direction.x);
+        }
     }
 }
