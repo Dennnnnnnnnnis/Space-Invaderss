@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 
     private float shkTime, shkMag, shkDrop;
     public float squash = 0f, targetSquash = 0f;
+    private float angle = 0;
 
     void Awake()
     {
@@ -25,23 +26,14 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 position = transform.position;
-
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            position.x -= speed * Time.deltaTime;
-        }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            position.x += speed * Time.deltaTime;
-        }
-
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
 
-        position.x = Mathf.Clamp(position.x, leftEdge.x, rightEdge.x);
+        float move = Mathf.Clamp(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime + transform.position.x, leftEdge.x, rightEdge.x) - transform.position.x;
 
-        transform.position = position;
+        transform.position += move * Vector3.right;
+        angle = Mathf.Lerp(angle, Input.GetAxisRaw("Horizontal") * -8f, 8f * Time.deltaTime);
+        spRend.transform.rotation = Quaternion.Euler(0, 0, angle);
 
         if (Input.GetKeyDown(KeyCode.Space) && laser == null)
         {
