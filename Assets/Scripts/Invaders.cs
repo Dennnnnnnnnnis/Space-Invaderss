@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Invaders : MonoBehaviour
 {
+    [SerializeField]
+    AudioSource shootingSound;
     public Invader[] prefab = new Invader[5];
 
     private int row = 5;
@@ -82,6 +84,7 @@ public class Invaders : MonoBehaviour
             float rand = UnityEngine.Random.value;
             if (rand < 0.2)
             {
+                shootingSound.Play();
                 Instantiate(missilePrefab, invader.position, Quaternion.identity);
                 Invader inv = invader.GetComponent<Invader>();
                 inv.Shake(0.1f, 0.1f, 1f);

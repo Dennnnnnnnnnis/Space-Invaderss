@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     Laser laser;
     [SerializeField] float speed = 5f;
     SpriteRenderer spRend;
+    [SerializeField]
+    AudioSource throwingAudio;
 
     private float shkTime, shkMag, shkDrop;
     public float squash = 0f, targetSquash = 0f;
@@ -43,6 +45,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && laser == null)
         {
+            throwingAudio.Play();
             laser = Instantiate(laserPrefab, transform.position, Quaternion.identity);
             squash = 0.8f;
         }

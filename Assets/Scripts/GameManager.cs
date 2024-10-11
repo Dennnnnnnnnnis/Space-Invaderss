@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] ParticleSystem deathParticles;
     [SerializeField] GameObject invaderDead;
+    [SerializeField]
+    AudioSource eatingSound;
 
     private float shkTime, shkMag, shkDrop;
     private float freezeTime = 0;
@@ -140,7 +142,7 @@ public class GameManager : MonoBehaviour
     public void OnInvaderKilled(Invader invader)
     {
         deactivationList.Add(invader);
-
+        eatingSound.Play();
         Freeze(0.05f);
         invader.Shake(0.05f, 0.5f, 0f);
     }
