@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     public float squash = 0f, targetSquash = 0f;
     private float angle = 0;
 
+    [HideInInspector] public bool controllable = true;
+
     void Awake()
     {
         spRend = GetComponentInChildren<SpriteRenderer>();
@@ -28,21 +30,21 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
-        Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
-
-        float move = Mathf.Clamp(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime + transform.position.x, leftEdge.x, rightEdge.x) - transform.position.x;
-
-        transform.position += move * Vector3.right;
-        angle = Mathf.Lerp(angle, Input.GetAxisRaw("Horizontal") * -8f, 8f * Time.deltaTime);
-        spRend.transform.rotation = Quaternion.Euler(0, 0, angle);
-
-        if (Input.GetKeyDown(KeyCode.Space) && laser == null)
+        if (controllable)
         {
-            throwingAudio.Play();
-            shootParticles.Play();
-            laser = Instantiate(laserPrefab, transform.position, Quaternion.identity);
-            squash = 0.8f;
+            float move = Mathf.Clamp(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime + transform.position.x, GameManager.Instance.lEdge, GameManager.Instance.rEdge) - transform.position.x;
+
+            transform.position += move * Vector3.right;
+            angle = Mathf.Lerp(angle, Input.GetAxisRaw("Horizontal") * -8f, 8f * Time.deltaTime);
+            spRend.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+            if (Input.GetKeyDown(KeyCode.Space) && laser == null)
+            {
+                throwingAudio.Play();
+                shootParticles.Play();
+                laser = Instantiate(laserPrefab, transform.position, Quaternion.identity);
+                squash = 0.8f;
+            }
         }
 
         if (shkTime > 0)
