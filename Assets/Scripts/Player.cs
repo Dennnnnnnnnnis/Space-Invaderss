@@ -13,11 +13,14 @@ public class Player : MonoBehaviour
     SpriteRenderer spRend;
     [SerializeField]
     AudioSource throwingAudio;
+    [SerializeField]
+    AudioSource walkingAudio;
     [SerializeField] ParticleSystem shootParticles;
 
     private float shkTime, shkMag, shkDrop;
     public float squash = 0f, targetSquash = 0f;
     private float angle = 0;
+    private bool playingAudio = false;
 
     [HideInInspector] public bool controllable = true;
 
@@ -30,6 +33,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        print(playingAudio);
         if (controllable)
         {
             float move = Mathf.Clamp(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime + transform.position.x, GameManager.Instance.lEdge, GameManager.Instance.rEdge) - transform.position.x;
@@ -45,7 +49,18 @@ public class Player : MonoBehaviour
                 laser = Instantiate(laserPrefab, transform.position, Quaternion.identity);
                 squash = 0.8f;
             }
+            if (Input.GetAxisRaw("Horizontal") != 0 && playingAudio == false)
+            {
+                walkingAudio.Play();
+                playingAudio = true;
+            } 
+            else if(Input.GetAxisRaw("Horizontal") == 0)
+            {
+                walkingAudio.Pause();
+                playingAudio = false;
+            }
         }
+
 
         if (shkTime > 0)
         {
