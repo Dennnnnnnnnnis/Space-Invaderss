@@ -174,7 +174,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
-  collsionSound: {fileID: 246121500426062505}
 --- !u!82 &246121500426062505
 AudioSource:
   m_ObjectHideFlags: 0
@@ -317,7 +316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4652714564497633110, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.054
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4652714564497633110, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
       propertyPath: m_LocalPosition.y
