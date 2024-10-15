@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     Vector2 positionTo = new Vector2();
 
     bool killPlayer = false;
-    float menuTimer = 4f;
+    float menuTimer = 2f;
 
     //Används ej just nu, men ni kan använda de senare
     public int score { get; private set; } = 0;
@@ -170,8 +170,8 @@ public class GameManager : MonoBehaviour
 
     public void OnPlayerKilled(Player player)
     {
-        Freeze(2f);
-        player.Shake(2f, 0.3f, 0f);
+        Freeze(0.5f);
+        player.Shake(0.5f, 0.2f, 0f);
         Zoom(2f);
         Move(player.transform.position);
         player.controllable = false;
