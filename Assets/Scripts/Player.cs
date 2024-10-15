@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     SpriteRenderer spRend;
     [SerializeField]
     AudioSource throwingAudio;
+    [SerializeField] ParticleSystem shootParticles;
 
     private float shkTime, shkMag, shkDrop;
     public float squash = 0f, targetSquash = 0f;
@@ -21,6 +22,7 @@ public class Player : MonoBehaviour
     void Awake()
     {
         spRend = GetComponentInChildren<SpriteRenderer>();
+        shootParticles.Stop();
     }
 
     // Update is called once per frame
@@ -38,6 +40,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && laser == null)
         {
             throwingAudio.Play();
+            shootParticles.Play();
             laser = Instantiate(laserPrefab, transform.position, Quaternion.identity);
             squash = 0.8f;
         }
