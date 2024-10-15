@@ -663,6 +663,7 @@ MonoBehaviour:
   laserPrefab: {fileID: -6925854217901669423, guid: c2bb9f3be01a9284fbf2078af0c5deb7, type: 3}
   speed: 8
   throwingAudio: {fileID: 592411988}
+  shootParticles: {fileID: 1446096691350957288, guid: f01f7383e8438594ba59944a1c52366e, type: 3}
   squash: 0
   targetSquash: 0
 --- !u!82 &592411988
