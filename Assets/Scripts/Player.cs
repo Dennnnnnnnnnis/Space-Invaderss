@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -16,6 +17,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     AudioSource walkingAudio;
     [SerializeField] ParticleSystem shootParticles;
+    bool immune = false;
+    float immunityTimer = 10f;
 
     private float shkTime, shkMag, shkDrop;
     public float squash = 0f, targetSquash = 0f;
@@ -79,15 +82,33 @@ public class Player : MonoBehaviour
         {
             squash = Mathf.Max(Mathf.Abs(squash - targetSquash) - Time.deltaTime * 4f, 0) * Mathf.Sign(squash - targetSquash) + targetSquash;
         }
+        if(immune == true)
+        {
+            immunityTimer -= Time.deltaTime;
+        }
+        if(immunityTimer <= 0)
+        {
+            immunityTimer = 10;
+            immune = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Missile") || collision.gameObject.layer == LayerMask.NameToLayer("Invader"))
         {
-            GameManager.Instance.OnPlayerKilled(this);
+            if(immune == false)
+            {
+                GameManager.Instance.OnPlayerKilled(this);
+            }
+        }
+        if (collision.tag == "borste")
+        {
+            Destroy(collision.gameObject);
+            immune = true;
         }
     }
+
 
     public void Shake(float shakeTime, float shakeMagnitude, float shakeDropoff)
     {
