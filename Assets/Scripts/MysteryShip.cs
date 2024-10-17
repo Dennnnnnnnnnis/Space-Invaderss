@@ -13,11 +13,16 @@ public class MysteryShip : MonoBehaviour
     int direction = -1;
     bool isVisible;
 
-    
+    SpriteRenderer spRend;
+
+    private float shkTime, shkMag, shkDrop;
+
     void Start()
     {
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
+
+        spRend = GetComponentInChildren<SpriteRenderer>();
 
         //positionen där den kommer stanna utanför skärmen.
         leftDestination = new Vector2(leftEdge.x - 1f, transform.position.y);
@@ -54,6 +59,18 @@ public class MysteryShip : MonoBehaviour
                 SetInvisible();
             }
         }
+
+        if (shkTime > 0)
+        {
+            shkTime -= Time.deltaTime;
+
+            if (shkTime > 0)
+                spRend.transform.localPosition = new Vector3(Random.Range(-shkMag, shkMag), Random.Range(-shkMag, shkMag));
+            else
+                spRend.transform.localPosition = Vector3.zero;
+
+            shkMag -= shkDrop * Time.deltaTime;
+        }
     }
 
   
@@ -85,8 +102,18 @@ public class MysteryShip : MonoBehaviour
     {
         if(collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
-            SetInvisible();
+            //SetInvisible();
             GameManager.Instance.OnMysteryShipKilled(this);
+        }
+    }
+
+    public void Shake(float shakeTime, float shakeMagnitude, float shakeDropoff)
+    {
+        if (shkTime <= 0 || shakeMagnitude > shkMag)
+        {
+            shkTime = shakeTime;
+            shkMag = shakeMagnitude;
+            shkDrop = shakeDropoff;
         }
     }
 }

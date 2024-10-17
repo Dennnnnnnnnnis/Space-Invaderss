@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Timeline.Actions;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro;
 
 [DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour
@@ -19,12 +21,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject invaderDead;
     [SerializeField]
     AudioSource eatingSound;
+    [SerializeField] TextMeshProUGUI scoreText, livesText;
+    [SerializeField] GameObject pointsObj;
+    [SerializeField] Canvas worldCanvas;
 
     [HideInInspector] public float rEdge, lEdge;
 
     private float shkTime, shkMag, shkDrop;
     private float freezeTime = 0;
-    private List<Invader> deactivationList = new List<Invader>();
+    private List<GameObject> deactivationList = new List<GameObject>();
 
     float camSize, zoom = 1, zoomTo = 1;
     Vector2 positionTo = new Vector2();
@@ -74,11 +79,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (lives <= 0 && Input.GetKeyDown(KeyCode.Return))
-        {
-            NewGame();
-        }
-
         if(shkTime > 0)
         {
             shkTime -= Time.unscaledDeltaTime;
@@ -104,17 +104,27 @@ public class GameManager : MonoBehaviour
 
             if(killPlayer)
             {
-                if(player.gameObject.active)
+                if(lives <= 0)
                 {
-                    SpriteRenderer sr = Instantiate(invaderDead, player.transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
-                    sr.sprite = player.GetComponentInChildren<SpriteRenderer>().sprite;
-                    sr.transform.localScale = player.GetComponentInChildren<SpriteRenderer>().transform.localScale;
+                    if (player.gameObject.active)
+                    {
+                        SpriteRenderer sr = Instantiate(invaderDead, player.transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
+                        sr.sprite = player.GetComponentInChildren<SpriteRenderer>().sprite;
+                        sr.transform.localScale = player.GetComponentInChildren<SpriteRenderer>().transform.localScale;
 
-                    player.gameObject.SetActive(false);
+                        player.gameObject.SetActive(false);
+                    }
+                    menuTimer -= Time.deltaTime;
+                    if (menuTimer <= 0)
+                        SceneManager.LoadScene(0);
                 }
-                menuTimer -= Time.deltaTime;
-                if (menuTimer <= 0)
-                    SceneManager.LoadScene(0);
+                else
+                {
+                    killPlayer = false;
+                    player.controllable = true;
+                    Zoom(1f);
+                    Move(Vector2.zero);
+                }
             }
         }
 
@@ -126,7 +136,6 @@ public class GameManager : MonoBehaviour
 
     private void NewGame()
     {
-
         SetScore(0);
         SetLives(3);
         NewRound();
@@ -158,29 +167,50 @@ public class GameManager : MonoBehaviour
         invaders.gameObject.SetActive(false);
     }
 
-    private void SetScore(int score)
+    private void SetScore(int points)
     {
-        
+        score = points;
+        scoreText.text = "Score: " + score;
     }
 
-    private void SetLives(int lives)
+    private void ChangeScore(int points, Vector3 pos)
     {
-       
+        GameObject newPoints = Instantiate(pointsObj, pos, Quaternion.Euler(0, 0, Random.Range(-10, 10)), worldCanvas.transform);
+        newPoints.GetComponentInChildren<TextMeshProUGUI>().text = "+" + points;
+        Destroy(newPoints, 0.667f);
+        SetScore(score + points);
+    }
+
+    private void SetLives(int _lives)
+    {
+        lives = _lives;
+        livesText.text = "Lives: " + lives;
     }
 
     public void OnPlayerKilled(Player player)
     {
-        Freeze(0.5f);
-        player.Shake(0.5f, 0.2f, 0f);
-        Zoom(2f);
-        Move(player.transform.position);
+        SetLives(lives - 1);
+        if(lives <= 0)
+        {
+            Freeze(0.5f);
+            player.Shake(0.5f, 0.2f, 0f);
+            Zoom(2f);
+            Move(player.transform.position);
+        }
+        else
+        {
+            Freeze(0.3f);
+            player.Shake(0.3f, 0.2f, 0f);
+            Zoom(1.5f);
+            Move(player.transform.position * 0.5f);
+        }
         player.controllable = false;
         killPlayer = true;
     }
 
     public void OnInvaderKilled(Invader invader)
     {
-        deactivationList.Add(invader);
+        deactivationList.Add(invader.gameObject);
         eatingSound.Play();
         Freeze(0.05f);
         invader.Shake(0.05f, 0.5f, 0f);
@@ -196,6 +226,11 @@ public class GameManager : MonoBehaviour
             sr.sprite = deactivationList[0].GetComponentInChildren<SpriteRenderer>().sprite;
             sr.transform.localScale = deactivationList[0].GetComponentInChildren<SpriteRenderer>().transform.localScale;
 
+            if (deactivationList[0].TryGetComponent<MysteryShip>(out MysteryShip ms))
+                ChangeScore(200, deactivationList[0].transform.position);
+            else
+                ChangeScore(10, deactivationList[0].transform.position);
+
             deactivationList[0].gameObject.SetActive(false);
             deactivationList.RemoveAt(0);
         }
@@ -208,7 +243,10 @@ public class GameManager : MonoBehaviour
 
     public void OnMysteryShipKilled(MysteryShip mysteryShip)
     {
-        mysteryShip.gameObject.SetActive(false);
+        deactivationList.Add(mysteryShip.gameObject);
+        eatingSound.Play();
+        Freeze(0.05f);
+        mysteryShip.Shake(0.05f, 0.5f, 0f);
     }
 
     public void OnBoundaryReached()
