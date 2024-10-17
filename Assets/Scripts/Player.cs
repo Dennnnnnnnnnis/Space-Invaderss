@@ -8,7 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Player : MonoBehaviour
 {
-    public Laser laserPrefab;
+    public Laser laserPrefab, bigLaserPrefab;
     Laser laser;
     [SerializeField] float speed = 5f;
     SpriteRenderer spRend;
@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     [SerializeField] ParticleSystem shootParticles;
     bool immune = false;
     float immunityTimer = 10f;
+
+    public int bigLasers = 10;
 
     private float shkTime, shkMag, shkDrop;
     public float squash = 0f, targetSquash = 0f;
@@ -49,8 +51,19 @@ public class Player : MonoBehaviour
             {
                 throwingAudio.Play();
                 shootParticles.Play();
-                laser = Instantiate(laserPrefab, transform.position, Quaternion.identity);
-                squash = 0.8f;
+                if(bigLasers <= 0)
+                {
+                    GameManager.Instance.Shake(0.2f, 0.1f, 0.1f);
+                    laser = Instantiate(laserPrefab, transform.position, Quaternion.identity);
+                    squash = 0.8f;
+                }
+                else
+                {
+                    GameManager.Instance.Shake(0.2f, 0.2f, 0.2f);
+                    laser = Instantiate(bigLaserPrefab, transform.position, Quaternion.identity);
+                    squash = 0.4f;
+                    bigLasers--;
+                }
             }
             if (Input.GetAxisRaw("Horizontal") != 0 && playingAudio == false)
             {
