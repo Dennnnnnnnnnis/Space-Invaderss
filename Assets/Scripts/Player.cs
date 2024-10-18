@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     AudioSource walkingAudio;
     [SerializeField] ParticleSystem shootParticles;
-    float immunityTimer = 10f;
+    float immunityTimer = 0f;
     [SerializeField] GameObject immuneEffect;
 
     public int bigLasers = 0;
@@ -121,7 +121,7 @@ public class Player : MonoBehaviour
         if (collision.tag == "borste")
         {
             Destroy(collision.gameObject);
-            immunityTimer = 10f;
+            immunityTimer = 6f;
         }
         else if (collision.tag == "tänder")
         {

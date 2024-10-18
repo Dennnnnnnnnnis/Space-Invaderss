@@ -6,12 +6,16 @@ public class Powerup : MonoBehaviour
 {
     [SerializeField] GameManager gM;
     [SerializeField]
-    GameObject tandBorste, tänder;
+    GameObject tandBorste, tÃ¤nder;
     int lastScore = 0;
+    GameObject tandBorste;
+    int xPosition;
+
     // Start is called before the first frame update
     void Start()
     {
         gM = GameManager.Instance;
+        xPosition = Random.Range(-10, 10);
     }
 
     // Update is called once per frame
@@ -26,8 +30,13 @@ public class Powerup : MonoBehaviour
         }
         else if (gM.score >= 200 && lastScore < 200)
         {
-            Instantiate(tänder);
+            Instantiate(tÃ¤nder);
             lastScore = 200;
+        }
+        else if(gM.score >= 500 && lastScore < 500)
+        {
+            Instantiate(tandBorste, (new Vector3(xPosition, 0, 0)), Quaternion.identity);
+            lastScore = 500
 
         }
     }
