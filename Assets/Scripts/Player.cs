@@ -19,11 +19,13 @@ public class Player : MonoBehaviour
     [SerializeField] ParticleSystem shootParticles;
     bool immune = false;
     float immunityTimer = 10f;
+    [SerializeField] GameObject immuneEffect;
 
     private float shkTime, shkMag, shkDrop;
     public float squash = 0f, targetSquash = 0f;
     private float angle = 0;
     private bool playingAudio = false;
+    bool immuneBool = true;
 
     [HideInInspector] public bool controllable = true;
 
@@ -31,6 +33,7 @@ public class Player : MonoBehaviour
     {
         spRend = GetComponentInChildren<SpriteRenderer>();
         shootParticles.Stop();
+        immuneEffect.SetActive(false);
     }
 
     // Update is called once per frame
@@ -84,13 +87,24 @@ public class Player : MonoBehaviour
         }
         if(immune == true)
         {
+            if (immuneBool)
+            {
+                immuneEffect.SetActive(true);
+            }
             immunityTimer -= Time.deltaTime;
+            immune = false;
         }
         if(immunityTimer <= 0)
         {
             immunityTimer = 10;
             immune = false;
         }
+        if (immune == false)
+        {
+            immuneEffect.SetActive(false);
+        }
+
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
