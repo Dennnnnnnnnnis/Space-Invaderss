@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     AudioSource walkingAudio;
     [SerializeField] ParticleSystem shootParticles;
     bool immune = false;
-    float immunityTimer = 10f;
+    float immunityTimer = 5f;
     [SerializeField] GameObject immuneEffect;
 
     public int bigLasers = 10;
@@ -41,7 +41,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(playingAudio);
+        print(immune);
+        print(immuneBool);
         if (controllable)
         {
             float move = Mathf.Clamp(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime + transform.position.x, GameManager.Instance.lEdge, GameManager.Instance.rEdge) - transform.position.x;
@@ -109,7 +110,7 @@ public class Player : MonoBehaviour
         }
         if(immunityTimer <= 0)
         {
-            immunityTimer = 10;
+            immunityTimer = 5;
             immune = false;
         }
         if (immune == false)
