@@ -18,10 +18,10 @@ public class GameManager : MonoBehaviour
     private Camera cam;
 
     [SerializeField] ParticleSystem deathParticles;
-    [SerializeField] GameObject invaderDead;
+    public GameObject invaderDead;
     [SerializeField]
     AudioSource eatingSound;
-    [SerializeField] TextMeshProUGUI scoreText, livesText;
+    [SerializeField] TextMeshProUGUI scoreText, livesText, roundText;
     [SerializeField] GameObject pointsObj;
     [SerializeField] Canvas worldCanvas;
 
@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
 
     bool killPlayer = false;
     float menuTimer = 2f;
+    float roundTimer = 0f;
 
     //Används ej just nu, men ni kan använda de senare
     public int score { get; private set; } = 0;
@@ -132,6 +133,18 @@ public class GameManager : MonoBehaviour
         cam.orthographicSize = camSize / zoom;
 
         transform.position = Vector3.Lerp(transform.position, new Vector3(positionTo.x, positionTo.y, -10), Time.unscaledDeltaTime * 4f);
+    
+        if(roundTimer > 0f)
+        {
+            roundTimer -= Time.deltaTime;
+            if (roundTimer <= 0)
+            {
+                roundText.gameObject.SetActive(false);
+                NewRound();
+            }
+            else
+                roundText.gameObject.SetActive(true);
+        }
     }
 
     private void NewGame()
@@ -151,7 +164,7 @@ public class GameManager : MonoBehaviour
             bunkers[i].ResetBunker();
         }
 
-        Respawn();
+        //Respawn();
     }
 
     private void Respawn()
@@ -220,7 +233,8 @@ public class GameManager : MonoBehaviour
     {
         for(var i = 0; i < deactivationList.Count; i++)
         {
-            Instantiate(deathParticles, deactivationList[0].transform.position, Quaternion.identity);
+            GameObject part = Instantiate(deathParticles, deactivationList[0].transform.position, Quaternion.identity).gameObject;
+            Destroy(part, 4f);
 
             SpriteRenderer sr = Instantiate(invaderDead, deactivationList[0].transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
             sr.sprite = deactivationList[0].GetComponentInChildren<SpriteRenderer>().sprite;
@@ -235,9 +249,9 @@ public class GameManager : MonoBehaviour
             deactivationList.RemoveAt(0);
         }
 
-        if (invaders.GetInvaderCount() == 0)
+        if (invaders.GetInvaderCount() == 0 && roundTimer <= 0f)
         {
-            NewRound();
+            roundTimer = 1f;
         }
     }
 

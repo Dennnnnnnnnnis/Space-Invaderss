@@ -7,11 +7,10 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Laser : Projectile
 {
-
+    [SerializeField] bool indestructable = false;
     private void Awake()
     {
         direction = Vector3.up;
-        GameManager.Instance.Shake(0.2f, 0.1f, 0.1f);
     }
 
     void Update()
@@ -30,13 +29,14 @@ public class Laser : Projectile
 
         if(bunker == null) //Om det inte är en bunker vi träffat så ska skottet försvinna.
         {
-            if(collision.gameObject.transform.tag == "Missile")
+            if(!indestructable || collision.gameObject.layer == 10)
             {
-                
-                Destroy(gameObject);
-            }
-            else
-            {
+                if (indestructable)
+                {
+                    SpriteRenderer sr = Instantiate(GameManager.Instance.invaderDead, transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
+                    sr.sprite = GetComponentInChildren<SpriteRenderer>().sprite;
+                    sr.transform.localScale = transform.localScale;
+                }
                 Destroy(gameObject);
             }
         }

@@ -43,7 +43,8 @@ public class Bunker : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Missile") || other.gameObject.layer == LayerMask.NameToLayer("Invader"))
         {
             impactSound.Play();
-            Instantiate(impact, other.gameObject.transform.position, Quaternion.identity);
+            GameObject part = Instantiate(impact, other.gameObject.transform.position, Quaternion.identity).gameObject;
+            Destroy(part, 4f);
             Shake(0.2f, 0.1f, 1f);
             //Ändrar färgen beroende på antal träffar.
             nrOfHits++;
