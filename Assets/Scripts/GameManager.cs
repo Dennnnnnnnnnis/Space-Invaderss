@@ -166,6 +166,8 @@ public class GameManager : MonoBehaviour
             bunkers[i].ResetBunker();
         }
 
+        mysteryShip.gameObject.SetActive(true);
+
         //Respawn();
     }
 
