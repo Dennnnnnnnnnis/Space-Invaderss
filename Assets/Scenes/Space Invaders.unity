@@ -236,7 +236,6 @@ MonoBehaviour:
   eatingSound: {fileID: 226794207}
   scoreText: {fileID: 796043296}
   livesText: {fileID: 961224764}
-  roundText: {fileID: 0}
   pointsObj: {fileID: 7138362293609081022, guid: 5e29305a589f7a544b5b4ebb1396ce6f, type: 3}
   worldCanvas: {fileID: 1041500950}
   rEdge: 0
@@ -1867,10 +1866,6 @@ PrefabInstance:
       propertyPath: walkingAudio
       value: 
       objectReference: {fileID: 959727492}
-    - target: {fileID: 8357443216377239075, guid: 543f4abe5c26c67408cb5c8b22d4ce8c, type: 3}
-      propertyPath: bigLaserPrefab
-      value: 
-      objectReference: {fileID: -6925854217901669423, guid: dd15f2787ad30f446a1c42835be5da61, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
