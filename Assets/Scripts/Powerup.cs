@@ -8,7 +8,6 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     GameObject tandBorste, tänder;
     int lastScore = 0;
-    GameObject tandBorste;
     int xPosition;
 
     // Start is called before the first frame update
@@ -36,7 +35,7 @@ public class Powerup : MonoBehaviour
         else if(gM.score >= 500 && lastScore < 500)
         {
             Instantiate(tandBorste, (new Vector3(xPosition, 0, 0)), Quaternion.identity);
-            lastScore = 500
+            lastScore = 500;
 
         }
     }
