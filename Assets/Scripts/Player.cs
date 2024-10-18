@@ -98,21 +98,15 @@ public class Player : MonoBehaviour
         {
             squash = Mathf.Max(Mathf.Abs(squash - targetSquash) - Time.deltaTime * 4f, 0) * Mathf.Sign(squash - targetSquash) + targetSquash;
         }
-        if(immune == true)
+        if(immunityTimer > 0)
         {
             if (immuneBool)
             {
                 immuneEffect.SetActive(true);
             }
             immunityTimer -= Time.deltaTime;
-            immune = false;
         }
-        if(immunityTimer <= 0)
-        {
-            immunityTimer = 10;
-            immune = false;
-        }
-        if (immune == false)
+        else
         {
             immuneEffect.SetActive(false);
         }
@@ -124,7 +118,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Missile") || collision.gameObject.layer == LayerMask.NameToLayer("Invader"))
         {
-            if(immune == false)
+            if(immunityTimer <= 0)
             {
                 GameManager.Instance.OnPlayerKilled(this);
             }
@@ -132,7 +126,7 @@ public class Player : MonoBehaviour
         if (collision.tag == "borste")
         {
             Destroy(collision.gameObject);
-            immune = true;
+            immunityTimer = 30f;
         }
     }
 
