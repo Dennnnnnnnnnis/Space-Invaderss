@@ -7,7 +7,7 @@ public class Powerup : MonoBehaviour
     [SerializeField] GameManager gM;
     [SerializeField]
     GameObject tandBorste, tänder;
-    int lastScore = 0;
+    int last = 0;
     int xPosition;
 
     // Start is called before the first frame update
@@ -21,22 +21,16 @@ public class Powerup : MonoBehaviour
     void Update()
     {
 
-        if(gM.score >= 100 && lastScore < 100)
+        if(gM.score % 400 >= 200 && last < 1)
         {
             Instantiate(tandBorste);
-            lastScore = 100;
+            last = 1;
 
         }
-        else if (gM.score >= 200 && lastScore < 200)
+        else if (gM.score % 400 < 200 && last == 1)
         {
             Instantiate(tänder);
-            lastScore = 200;
-        }
-        else if(gM.score >= 500 && lastScore < 500)
-        {
-            Instantiate(tandBorste, (new Vector3(xPosition, 0, 0)), Quaternion.identity);
-            lastScore = 500;
-
+            last = 0;
         }
     }
 }
