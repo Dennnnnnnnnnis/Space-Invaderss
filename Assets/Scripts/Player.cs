@@ -121,7 +121,7 @@ public class Player : MonoBehaviour
         if (collision.tag == "borste")
         {
             Destroy(collision.gameObject);
-            immunityTimer = 10f;
+            immunityTimer = 6f;
         }
     }
 
