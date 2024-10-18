@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour
         cam = GetComponent<Camera>();
         camSize = cam.orthographicSize;
 
+        roundText.gameObject.SetActive(false);
+
         lEdge = cam.ViewportToWorldPoint(Vector3.zero).x;
         rEdge = cam.ViewportToWorldPoint(Vector3.right).x;
     }

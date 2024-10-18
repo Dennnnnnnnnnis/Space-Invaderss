@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     float immunityTimer = 10f;
     [SerializeField] GameObject immuneEffect;
 
-    public int bigLasers = 10;
+    public int bigLasers = 0;
 
     private float shkTime, shkMag, shkDrop;
     public float squash = 0f, targetSquash = 0f;
@@ -122,6 +122,11 @@ public class Player : MonoBehaviour
         {
             Destroy(collision.gameObject);
             immunityTimer = 10f;
+        }
+        else if (collision.tag == "tänder")
+        {
+            Destroy(collision.gameObject);
+            bigLasers++;
         }
     }
 

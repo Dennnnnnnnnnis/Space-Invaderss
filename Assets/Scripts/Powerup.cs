@@ -6,8 +6,8 @@ public class Powerup : MonoBehaviour
 {
     [SerializeField] GameManager gM;
     [SerializeField]
-    GameObject tandBorste;
-    bool spawnable = true;
+    GameObject tandBorste, tänder;
+    int lastScore = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,10 +18,16 @@ public class Powerup : MonoBehaviour
     void Update()
     {
 
-        if(gM.score >= 100 && spawnable)
+        if(gM.score >= 100 && lastScore < 100)
         {
             Instantiate(tandBorste);
-            spawnable = false;
+            lastScore = 100;
+
+        }
+        else if (gM.score >= 200 && lastScore < 200)
+        {
+            Instantiate(tänder);
+            lastScore = 200;
 
         }
     }

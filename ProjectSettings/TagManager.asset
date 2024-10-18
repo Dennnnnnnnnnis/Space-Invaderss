@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Missile
   - borste
+  - "t\xE4nder"
   layers:
   - Default
   - TransparentFX

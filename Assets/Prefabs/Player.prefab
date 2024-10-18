@@ -5187,7 +5187,7 @@ MonoBehaviour:
   walkingAudio: {fileID: 7567000599369406664}
   shootParticles: {fileID: 702698287144931073}
   immuneEffect: {fileID: 3196423373907274548}
-  bigLasers: 10
+  bigLasers: 0
   squash: 0
   targetSquash: 0
   controllable: 1
