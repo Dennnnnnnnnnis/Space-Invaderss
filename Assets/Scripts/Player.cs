@@ -30,11 +30,17 @@ public class Player : MonoBehaviour
 
     [HideInInspector] public bool controllable = true;
 
+    [SerializeField] AudioClip[] lines;
+    int lastLine = -1;
+    AudioSource linePlayer;
+    [Range(0.0f, 1.0f)] public float realism = 0.2f;
+
     void Awake()
     {
         spRend = GetComponentInChildren<SpriteRenderer>();
         shootParticles.Stop();
         immuneEffect.SetActive(false);
+        linePlayer = spRend.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -139,5 +145,27 @@ public class Player : MonoBehaviour
             shkMag = shakeMagnitude;
             shkDrop = shakeDropoff;
         }
+    }
+
+    public void PlayVoiceLine(int ln = -1)
+    {
+        if (Random.Range(0f, 1f) > realism)
+            return;
+
+        int clip = ln;
+        if(clip == -1)
+        {
+            int count = lines.Length;
+            if (lastLine != -1)
+                count--;
+
+            clip = Random.Range(0, count);
+            if (clip >= lastLine)
+                clip++;
+        }
+
+        linePlayer.clip = lines[clip];
+        linePlayer.Play();
+        lastLine = clip;
     }
 }

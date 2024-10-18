@@ -167,6 +167,7 @@ public class GameManager : MonoBehaviour
         }
 
         mysteryShip.gameObject.SetActive(true);
+        player.realism += 0.05f;
 
         //Respawn();
     }
@@ -213,6 +214,7 @@ public class GameManager : MonoBehaviour
             player.Shake(0.5f, 0.2f, 0f);
             Zoom(2f);
             Move(player.transform.position);
+            player.PlayVoiceLine(5);
         }
         else
         {
@@ -220,6 +222,7 @@ public class GameManager : MonoBehaviour
             player.Shake(0.3f, 0.2f, 0f);
             Zoom(1.5f);
             Move(player.transform.position * 0.5f);
+            player.PlayVoiceLine();
         }
         player.controllable = false;
         killPlayer = true;
