@@ -8,19 +8,22 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     GameObject tandBorste;
     bool spawnable = true;
+    int xPosition;
+
     // Start is called before the first frame update
     void Start()
     {
         gM = GameManager.Instance;
+        xPosition = Random.Range(-10, 10);
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if(gM.score >= 100 && spawnable)
+        if(gM.score >= 500 && spawnable)
         {
-            Instantiate(tandBorste);
+            Instantiate(tandBorste, (new Vector3(xPosition, 0, 0)), Quaternion.identity);
             spawnable = false;
 
         }

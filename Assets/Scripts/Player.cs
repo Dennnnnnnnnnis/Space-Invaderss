@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     AudioSource walkingAudio;
     [SerializeField] ParticleSystem shootParticles;
-    float immunityTimer = 10f;
+    float immunityTimer = 0f;
     [SerializeField] GameObject immuneEffect;
 
     public int bigLasers = 10;
