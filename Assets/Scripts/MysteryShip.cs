@@ -25,8 +25,8 @@ public class MysteryShip : MonoBehaviour
         spRend = GetComponentInChildren<SpriteRenderer>();
 
         //positionen där den kommer stanna utanför skärmen.
-        leftDestination = new Vector2(leftEdge.x - 1f, transform.position.y);
-        rightDestination = new Vector2(rightEdge.x + 1f, transform.position.y);
+        leftDestination = new Vector2(leftEdge.x - 3f, transform.position.y);
+        rightDestination = new Vector2(rightEdge.x + 3f, transform.position.y);
 
         SetInvisible();
     }
