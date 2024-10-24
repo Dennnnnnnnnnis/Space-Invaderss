@@ -7,6 +7,7 @@ public class BossMissile : MonoBehaviour
     [HideInInspector] public Invader target;
     float spin = 1f;
     float prec = 1f;
+    bool destroy = false;
 
     // Start is called before the first frame update
     void Start()
@@ -29,18 +30,23 @@ public class BossMissile : MonoBehaviour
             transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + (360f * spin * spin));
             spin = Mathf.Max(spin - Time.deltaTime * 2f, 0f);
         }
+
+        if (destroy && Time.timeScale != 0)
+            Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.transform == target.transform)
+        if(!destroy && collision.transform == target.transform)
         {
             target.hp -= 20;
             target.Shake(0.4f, 0.5f, 1f);
             if (target.hp <= 0)
                 GameManager.Instance.OnInvaderKilled(target);
 
-            Destroy(gameObject);
+            destroy = true;
+            GameManager.Instance.Freeze(0.1f);
+            GameManager.Instance.Shake(0.1f, 0.1f, 0f);
         }
     }
 }

@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     float bossThingTimer = 6f;
     BossThing bossMissileThing;
     float bossFade = 0f;
-    [SerializeField] SpriteRenderer overlay;
+    [SerializeField] SpriteRenderer overlay, overlay2;
 
     //Används ej just nu, men ni kan använda de senare
     public int score { get; private set; } = 0;
@@ -162,7 +162,12 @@ public class GameManager : MonoBehaviour
                 if (infiniteMode)
                     roundText.text = "Wave " + (wave+1);
                 else
-                    roundText.text = "Wave " + (wave+1) + "/5";
+                {
+                    if(wave == 5)
+                        roundText.text = "You finished the game. The little baby game. Are you proud?";
+                    else
+                        roundText.text = "Wave " + (wave + 1) + "/5";
+                }
             }
         }
 
@@ -179,6 +184,7 @@ public class GameManager : MonoBehaviour
             {
                 bossFade = Mathf.Min(bossFade + Time.deltaTime * 0.2f, 1f);
                 overlay.color = new Color(28f / 255f, 19f / 255f, 58f / 255f, bossFade * 0.5f);
+                overlay2.color = new Color(1f, 1f, 1f, bossFade * 0.3f);
             }
         }
     }
@@ -193,7 +199,12 @@ public class GameManager : MonoBehaviour
     private void NewRound()
     {
         wave++;
-        boss = (wave == 2 && !infiniteMode);
+        boss = (wave == 5 && !infiniteMode);
+        if (wave > 5 && !infiniteMode)
+        {
+            SceneManager.LoadScene(0);
+            return;
+        }
 
         if (!boss)
         {
@@ -309,7 +320,10 @@ public class GameManager : MonoBehaviour
 
         if (invaders.GetInvaderCount() == 0 && roundTimer <= 0f)
         {
-            roundTimer = 2.4f;
+            if (wave == 5 && !infiniteMode)
+                roundTimer = 5f;
+            else
+                roundTimer = 2.4f;
         }
     }
 
