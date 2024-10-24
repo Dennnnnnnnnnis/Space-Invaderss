@@ -5213,6 +5213,8 @@ MonoBehaviour:
   squash: 0
   targetSquash: 0
   controllable: 1
+  lines: []
+  realism: 0.2
 --- !u!82 &1726686691423667648
 AudioSource:
   m_ObjectHideFlags: 0
