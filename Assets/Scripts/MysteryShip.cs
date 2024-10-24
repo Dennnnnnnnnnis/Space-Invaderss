@@ -103,7 +103,7 @@ public class MysteryShip : MonoBehaviour
     {
         if(collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
-            //SetInvisible();
+            SetInvisible();
             GameManager.Instance.OnMysteryShipKilled(this);
         }
     }
