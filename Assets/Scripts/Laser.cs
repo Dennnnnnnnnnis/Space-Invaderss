@@ -8,7 +8,7 @@ using static UnityEngine.GraphicsBuffer;
 [RequireComponent(typeof(BoxCollider2D))]
 public class Laser : Projectile
 {
-    [SerializeField] bool indestructable = false;
+    public bool indestructable = false;
     private void Awake()
     {
         direction = Vector3.up;

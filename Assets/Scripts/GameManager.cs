@@ -39,13 +39,17 @@ public class GameManager : MonoBehaviour
     float menuTimer = 2f;
     float roundTimer = 0f;
 
+    public bool infiniteMode = false;
     public bool boss = false;
     float bossThingTimer = 6f;
     BossThing bossMissileThing;
+    float bossFade = 0f;
+    [SerializeField] SpriteRenderer overlay;
 
     //Används ej just nu, men ni kan använda de senare
     public int score { get; private set; } = 0;
     public int lives { get; private set; } = 3;
+    int wave = 0;
 
     private void Awake()
     {
@@ -152,7 +156,14 @@ public class GameManager : MonoBehaviour
                 NewRound();
             }
             else
+            {
                 roundText.gameObject.SetActive(true);
+
+                if (infiniteMode)
+                    roundText.text = "Wave " + (wave+1);
+                else
+                    roundText.text = "Wave " + (wave+1) + "/5";
+            }
         }
 
         if (boss)
@@ -162,6 +173,12 @@ public class GameManager : MonoBehaviour
             {
                 bossThingTimer = Random.Range(10f, 15f);
                 bossMissileThing.StartFalling();
+            }
+
+            if(bossFade < 1f)
+            {
+                bossFade = Mathf.Min(bossFade + Time.deltaTime * 0.2f, 1f);
+                overlay.color = new Color(28f / 255f, 19f / 255f, 58f / 255f, bossFade * 0.5f);
             }
         }
     }
@@ -175,7 +192,10 @@ public class GameManager : MonoBehaviour
 
     private void NewRound()
     {
-        if(!boss)
+        wave++;
+        boss = (wave == 2 && !infiniteMode);
+
+        if (!boss)
         {
             invaders.ResetInvaders();
             invaders.gameObject.SetActive(true);
@@ -252,10 +272,17 @@ public class GameManager : MonoBehaviour
         killPlayer = true;
     }
 
-    public void OnInvaderKilled(Invader invader)
+    public void OnInvaderKilled(Invader invader, bool deathByBeingConsumed = false)
     {
         deactivationList.Add(invader.gameObject);
+
+        if (deathByBeingConsumed)
+            eatingSound.pitch = Random.Range(0.5f, 0.9f);
+        else
+            eatingSound.pitch = Random.Range(0.8f, 1.2f);
         eatingSound.Play();
+
+
         Freeze(0.05f);
         invader.Shake(0.05f, 0.5f, 0f);
     }
@@ -282,7 +309,7 @@ public class GameManager : MonoBehaviour
 
         if (invaders.GetInvaderCount() == 0 && roundTimer <= 0f)
         {
-            roundTimer = 1f;
+            roundTimer = 2.4f;
         }
     }
 

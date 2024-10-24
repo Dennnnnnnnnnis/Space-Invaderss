@@ -89,7 +89,7 @@ public class Invader : MonoBehaviour
                     GameManager.Instance.OnInvaderKilled(this);
             }
             else
-                GameManager.Instance.OnInvaderKilled(this);
+                GameManager.Instance.OnInvaderKilled(this, collision.GetComponent<Laser>().indestructable);
         }
         else if(collision.gameObject.layer == LayerMask.NameToLayer("Boundary")) //nått nedre kanten
         {
