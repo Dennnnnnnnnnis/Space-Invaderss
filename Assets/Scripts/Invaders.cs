@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 public class Invaders : MonoBehaviour
@@ -17,11 +18,14 @@ public class Invaders : MonoBehaviour
     private Vector3 direction = Vector3.right;
 
     public Missile missilePrefab;
+    [HideInInspector] public Invader bossInvader;
 
     private void Awake()
     {
+        bossInvader = GetComponentInChildren<Invader>();
         initialPosition = transform.position;
         CreateInvaderGrid();
+        bossInvader.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -60,9 +64,20 @@ public class Invaders : MonoBehaviour
 
         foreach(Transform invader in transform)
         {
-            invader.gameObject.SetActive(true);
-            invader.GetComponent<Invader>().facingDir = 1;
+            Invader inv = invader.GetComponent<Invader>();
+
+            invader.gameObject.SetActive(!inv.isBoss);
+            inv.facingDir = 1;
         }
+    }
+
+    public void SpawnBoss()
+    {
+        direction = Vector3.right;
+        transform.position = initialPosition;
+
+        bossInvader.gameObject.SetActive(true);
+        bossInvader.hp = 100;
     }
 
     //Skjuter slumpmässigt iväg en missil.
@@ -70,30 +85,54 @@ public class Invaders : MonoBehaviour
     {
         int nrOfInvaders = GetInvaderCount();
 
-        if(nrOfInvaders == 0)
+        if (nrOfInvaders == 0)
         {
             return;
         }
 
-        foreach(Transform invader in transform)
+        if (!GameManager.Instance.boss)
         {
-
-            if (!invader.gameObject.activeInHierarchy) //om en invader är död ska den inte kunna skjuta...
-                continue;
-            
-           
-            float rand = UnityEngine.Random.value;
-            if (rand < 0.2)
+            foreach (Transform invader in transform)
             {
-                shootingSound.Play();
-                Instantiate(missilePrefab, invader.position, Quaternion.identity);
-                Invader inv = invader.GetComponent<Invader>();
-                inv.Shake(0.1f, 0.1f, 1f);
-                inv.squash = 1f;
-                break;
+
+                if (!invader.gameObject.activeInHierarchy) //om en invader är död ska den inte kunna skjuta...
+                    continue;
+
+
+                float rand = UnityEngine.Random.value;
+                if (rand < 0.2)
+                {
+                    shootingSound.Play();
+                    Instantiate(missilePrefab, invader.position, Quaternion.identity);
+                    Invader inv = invader.GetComponent<Invader>();
+                    inv.Shake(0.1f, 0.1f, 1f);
+                    inv.squash = 1f;
+                    break;
+                }
             }
         }
-       
+        else
+        {
+            float rand = UnityEngine.Random.value;
+            if(rand < 0.5f)
+            {
+                shootingSound.Play();
+                Instantiate(missilePrefab, bossInvader.transform.position, Quaternion.identity);
+                bossInvader.Shake(0.1f, 0.1f, 1f);
+                bossInvader.squash = 1f;
+            }
+            else if(rand < 0.7f)
+            {
+                float step = (GameManager.Instance.rEdge - GameManager.Instance.lEdge) / 9f;
+
+                shootingSound.Play();
+                for (int i = 0; i < 9; i++)
+                {
+                    Instantiate(missilePrefab, new Vector2((i - 4.5f) * step, 10), Quaternion.identity);
+                }
+                GameManager.Instance.Shake(0.1f, 0.2f, 0f);
+            }
+        }
     }
 
     //Kollar hur många invaders som lever
@@ -129,6 +168,21 @@ public class Invaders : MonoBehaviour
             {
                 AdvanceRow();
                 break;
+            }
+        }
+
+        bool kill = true;
+        if(Input.GetKeyDown(KeyCode.K)) // Fusk
+        {
+            foreach (Transform invader in transform)
+            {
+                if (kill)
+                {
+                    GameManager.Instance.OnInvaderKilled(invader.GetComponent<Invader>());
+                    kill = false;
+                }
+                else
+                    invader.gameObject.SetActive(false);
             }
         }
     }

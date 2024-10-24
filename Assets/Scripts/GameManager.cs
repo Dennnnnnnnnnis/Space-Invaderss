@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     private Player player;
-    private Invaders invaders;
+    [HideInInspector] public Invaders invaders;
     private MysteryShip mysteryShip;
     private Bunker[] bunkers;
     private Camera cam;
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreText, livesText, roundText;
     [SerializeField] GameObject pointsObj;
     [SerializeField] Canvas worldCanvas;
+    [SerializeField] GameObject hitEffect;
 
     [HideInInspector] public float rEdge, lEdge;
 
@@ -37,6 +38,10 @@ public class GameManager : MonoBehaviour
     bool killPlayer = false;
     float menuTimer = 2f;
     float roundTimer = 0f;
+
+    public bool boss = false;
+    float bossThingTimer = 6f;
+    BossThing bossMissileThing;
 
     //Används ej just nu, men ni kan använda de senare
     public int score { get; private set; } = 0;
@@ -60,6 +65,8 @@ public class GameManager : MonoBehaviour
 
         lEdge = cam.ViewportToWorldPoint(Vector3.zero).x;
         rEdge = cam.ViewportToWorldPoint(Vector3.right).x;
+
+        bossMissileThing = FindObjectOfType<BossThing>();
     }
 
     private void OnDestroy()
@@ -147,6 +154,16 @@ public class GameManager : MonoBehaviour
             else
                 roundText.gameObject.SetActive(true);
         }
+
+        if (boss)
+        {
+            bossThingTimer -= Time.deltaTime;
+            if(bossThingTimer <= 0f)
+            {
+                bossThingTimer = Random.Range(10f, 15f);
+                bossMissileThing.StartFalling();
+            }
+        }
     }
 
     private void NewGame()
@@ -158,8 +175,15 @@ public class GameManager : MonoBehaviour
 
     private void NewRound()
     {
-        invaders.ResetInvaders();
-        invaders.gameObject.SetActive(true);
+        if(!boss)
+        {
+            invaders.ResetInvaders();
+            invaders.gameObject.SetActive(true);
+        }
+        else
+        {
+            invaders.SpawnBoss();
+        }
 
         for (int i = 0; i < bunkers.Length; i++)
         {
@@ -305,5 +329,10 @@ public class GameManager : MonoBehaviour
     public void Move(Vector2 newPos)
     {
         positionTo = newPos;
+    }
+
+    public void CreateHitEffect(Vector2 pos) // Enklaste grejen någonsin
+    {
+        Destroy(Instantiate(hitEffect, pos, Quaternion.identity), 0.17f);
     }
 }
