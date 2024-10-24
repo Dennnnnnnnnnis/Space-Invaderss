@@ -6,7 +6,7 @@ using UnityEngine;
 public class MysteryShip : MonoBehaviour
 {
     float speed = 5f;
-    float cycleTime = 5f;
+    float cycleTime;
 
     Vector2 leftDestination;
     Vector2 rightDestination;
@@ -78,8 +78,9 @@ public class MysteryShip : MonoBehaviour
     void SetInvisible()
     {
         isVisible = false;
+        cycleTime = Random.Range(5f, 15f);
 
-        if(direction == 1)
+        if (direction == 1)
         {
             transform.position = rightDestination;
         }
