@@ -7,6 +7,8 @@ TagManager:
   - Missile
   - borste
   - "t\xE4nder"
+  - Morot
+  - Rabbit
   layers:
   - Default
   - TransparentFX
