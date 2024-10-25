@@ -1092,6 +1092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 767082b9a8febff4abd20238cb34517c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rabbitCount: 4
   walkingSpeed: 7.5
   runningSpeed: 11.5
   jumpSpeed: 8
@@ -1100,8 +1101,6 @@ MonoBehaviour:
   lookSpeed: 2
   lookXLimit: 45
   carrot: {fileID: 1072864028182513425, guid: b9dc84f335c76d7458fb7cb602d14999, type: 3}
-  wintext: {fileID: 3962792188813032352, guid: 53d2d8c611594ba41b1d35c5aaaffd83, type: 3}
-  carrotS: {fileID: 0}
   canMove: 1
 --- !u!143 &641417699
 CharacterController:
@@ -2327,7 +2326,7 @@ Transform:
   m_GameObject: {fileID: 1616188066}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.12, y: 0, z: 0}
+  m_LocalPosition: {x: 12.12, y: 0, z: 21.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -88,6 +88,8 @@ public class SC_FPSController : MonoBehaviour
         if(other.gameObject.tag == "Rabbit")
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + -2);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 }
