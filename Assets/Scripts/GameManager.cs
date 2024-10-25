@@ -32,13 +32,16 @@ public class GameManager : MonoBehaviour
     private float freezeTime = 0;
     private List<GameObject> deactivationList = new List<GameObject>();
 
+    // Flytta och zooma med kameran
     float camSize, zoom = 1, zoomTo = 1;
     Vector2 positionTo = new Vector2();
 
+    // Mellan rundor och sånt
     bool killPlayer = false;
     float menuTimer = 2f;
     float roundTimer = 0f;
 
+    // Boss battle
     public bool infiniteMode = false;
     public bool boss = false;
     float bossThingTimer = 6f;
@@ -93,6 +96,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        // Skakar objektet
         if(shkTime > 0)
         {
             shkTime -= Time.unscaledDeltaTime;
@@ -105,6 +109,7 @@ public class GameManager : MonoBehaviour
             shkMag -= shkDrop * Time.unscaledDeltaTime;
         }
 
+        // Frys effekten
         if (freezeTime > 0)
         {
             Time.timeScale = 0;
@@ -112,6 +117,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            // Och när den är över så 'dödar' den allt som behövs. Det ger en liten cool effekt.
             Time.timeScale = 1;
             if (deactivationList.Count != 0)
                 KillDueInvaders();
@@ -122,6 +128,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (player.gameObject.active)
                     {
+                        // Om det är spelarens sista liv så flyger dem av skärmen
                         SpriteRenderer sr = Instantiate(invaderDead, player.transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
                         sr.sprite = player.GetComponentInChildren<SpriteRenderer>().sprite;
                         sr.transform.localScale = player.GetComponentInChildren<SpriteRenderer>().transform.localScale;
@@ -142,11 +149,13 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        // Zoom och position som rör sig mot sitt mål
         zoom = Mathf.Lerp(zoom, zoomTo, Time.unscaledDeltaTime * 4f);
         cam.orthographicSize = camSize / zoom;
 
         transform.position = Vector3.Lerp(transform.position, new Vector3(positionTo.x, positionTo.y, -10), Time.unscaledDeltaTime * 4f);
     
+        // Texten i mellan rundor, mest där så att spelet inte krashar av alla partiklar, men även ganska bra för en liten lugn stund.
         if(roundTimer > 0f)
         {
             roundTimer -= Time.deltaTime;
@@ -159,6 +168,7 @@ public class GameManager : MonoBehaviour
             {
                 roundText.gameObject.SetActive(true);
 
+                // Ändrar texten beroende på omständigheterna
                 if (infiniteMode)
                     roundText.text = "Wave " + (wave+1);
                 else
@@ -173,6 +183,7 @@ public class GameManager : MonoBehaviour
 
         if (boss)
         {
+            // Jag vet att "Boss thing" är ett väldigt dåligt namn, men det är den stora moroten som man ska skjuta för att aktivera
             bossThingTimer -= Time.deltaTime;
             if(bossThingTimer <= 0f)
             {
@@ -180,6 +191,7 @@ public class GameManager : MonoBehaviour
                 bossMissileThing.StartFalling();
             }
 
+            // Detta är för att långsamt ta in regnet
             if(bossFade < 1f)
             {
                 bossFade = Mathf.Min(bossFade + Time.deltaTime * 0.2f, 1f);
@@ -206,6 +218,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // Spawnar invaders eller boss beroende på om det är en boss runda eller inte
         if (!boss)
         {
             invaders.ResetInvaders();
@@ -222,9 +235,9 @@ public class GameManager : MonoBehaviour
         }
 
         mysteryShip.gameObject.SetActive(true);
-        player.realism += 0.05f;
+        player.realism += 0.05f; // Gör spelet mer realistiskt ju längre man kommer
 
-        //Respawn();
+        //Respawn(); // Tog bort detta för att det var bara lite konstigt? Det är bättre att vara där man vet när rundan börjar istället för att försvinna till mitten igen.
     }
 
     private void Respawn()
@@ -248,6 +261,7 @@ public class GameManager : MonoBehaviour
 
     private void ChangeScore(int points, Vector3 pos)
     {
+        // Det här visar hur mycket poäng man får med en liten text animation
         GameObject newPoints = Instantiate(pointsObj, pos, Quaternion.Euler(0, 0, Random.Range(-10, 10)), worldCanvas.transform);
         newPoints.GetComponentInChildren<TextMeshProUGUI>().text = "+" + points;
         Destroy(newPoints, 0.667f);
@@ -265,6 +279,7 @@ public class GameManager : MonoBehaviour
         SetLives(lives - 1);
         if(lives <= 0)
         {
+            // Man måste vara lite extra när man ska dö, så allt är mer drastiskt
             Freeze(0.5f);
             player.Shake(0.5f, 0.2f, 0f);
             Zoom(2f);
@@ -273,13 +288,14 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            // Och detta är mindre drastiskt
             Freeze(0.3f);
             player.Shake(0.3f, 0.2f, 0f);
             Zoom(1.5f);
             Move(player.transform.position * 0.5f);
             player.PlayVoiceLine();
         }
-        player.controllable = false;
+        player.controllable = false; // Ta bort kontroll från spelaren så att den inte kan skjuta och sånt
         killPlayer = true;
     }
 
@@ -293,33 +309,39 @@ public class GameManager : MonoBehaviour
             eatingSound.pitch = Random.Range(0.8f, 1.2f);
         eatingSound.Play();
 
-
+        // Coolhet
         Freeze(0.05f);
         invader.Shake(0.05f, 0.5f, 0f);
     }
 
     void KillDueInvaders()
     {
+        // Detta finns för att behålla de 'döende' invaders under freeze framen
         for(var i = 0; i < deactivationList.Count; i++)
         {
+            // Partiklar
             GameObject part = Instantiate(deathParticles, deactivationList[0].transform.position, Quaternion.identity).gameObject;
             Destroy(part, 4f);
 
+            // Flyger av skärmen
             SpriteRenderer sr = Instantiate(invaderDead, deactivationList[0].transform.position, Quaternion.identity).GetComponent<SpriteRenderer>();
             sr.sprite = deactivationList[0].GetComponentInChildren<SpriteRenderer>().sprite;
             sr.transform.localScale = deactivationList[0].GetComponentInChildren<SpriteRenderer>().transform.localScale;
 
+            // Ger poäng
             if (deactivationList[0].TryGetComponent<MysteryShip>(out MysteryShip ms))
                 ChangeScore(200, deactivationList[0].transform.position);
             else
                 ChangeScore(10, deactivationList[0].transform.position);
 
+            // Och försvinner
             deactivationList[0].gameObject.SetActive(false);
             deactivationList.RemoveAt(0);
         }
 
         if (invaders.GetInvaderCount() == 0 && roundTimer <= 0f)
         {
+            // Om bossen är besegrad så får man mer tid för sina sista stunder
             if (wave == 5 && !infiniteMode)
                 roundTimer = 5f;
             else
@@ -346,12 +368,14 @@ public class GameManager : MonoBehaviour
 
     public void Shake(float shakeTime, float shakeMagnitude, float shakeDropoff)
     {
+        // Det här får kameran att skaka
         if(shkTime <= 0 || shakeMagnitude > shkMag)
         {
-            shkTime = shakeTime;
-            shkMag = shakeMagnitude;
-            shkDrop = shakeDropoff;
+            shkTime = shakeTime; // Hur länge det skakas
+            shkMag = shakeMagnitude; // Hur mycket det skakas
+            shkDrop = shakeDropoff; // Och hur mycket skak som försvinner per sekund
         }
+        // Detta är dessamma för alla Shake funktioner, så jag kunde säkert gjort detta på ett bättre sätt. Aja
     }
 
     public void Freeze(float time)
@@ -372,8 +396,9 @@ public class GameManager : MonoBehaviour
         positionTo = newPos;
     }
 
-    public void CreateHitEffect(Vector2 pos) // Enklaste grejen någonsin
+    public void CreateHitEffect(Vector2 pos)
     {
+        // Detta spawnar (och förstör) den knappast märkbara hit effekten som kommer när skott träffar saker
         Destroy(Instantiate(hitEffect, pos, Quaternion.identity), 0.17f);
     }
 }
