@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class SC_FPSController : MonoBehaviour
 {
+    //jag skrev inte player controllern för jag gjorde hela 3d-minigamet på två lektioner. Jag skrev dock delen i slutet
+    public int rabbitCount = 4;
     public float walkingSpeed = 7.5f;
     public float runningSpeed = 11.5f;
     public float jumpSpeed = 8.0f;
@@ -20,13 +23,13 @@ public class SC_FPSController : MonoBehaviour
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
 
+
     [HideInInspector]
     public bool canMove = true;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -72,11 +75,14 @@ public class SC_FPSController : MonoBehaviour
             playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
             transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
         }
+        //om man klickar spawnar en morot i maghöjd på spelaren och har samma rotation som kameran.
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             Instantiate(carrot, playerCamera.transform.position + new Vector3(0,-0.5f,0), playerCamera.transform.rotation);
         }
     }
+
+    // om man kolliderar med något med tag:en Rabbit alltså om den nuddar dig, åker man tillbaka till menyn
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Rabbit")

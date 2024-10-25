@@ -20,6 +20,11 @@ public class Menu : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
+
+    public void Play3DGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
+    }
     public void QuitGame()
     {
         Application.Quit();
