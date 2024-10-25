@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     private Player player;
-    private Invaders invaders;
+    [HideInInspector] public Invaders invaders;
     private MysteryShip mysteryShip;
     private Bunker[] bunkers;
     private Camera cam;
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreText, livesText, roundText;
     [SerializeField] GameObject pointsObj;
     [SerializeField] Canvas worldCanvas;
+    [SerializeField] GameObject hitEffect;
 
     [HideInInspector] public float rEdge, lEdge;
 
@@ -38,9 +39,17 @@ public class GameManager : MonoBehaviour
     float menuTimer = 2f;
     float roundTimer = 0f;
 
+    public bool infiniteMode = false;
+    public bool boss = false;
+    float bossThingTimer = 6f;
+    BossThing bossMissileThing;
+    float bossFade = 0f;
+    [SerializeField] SpriteRenderer overlay, overlay2;
+
     //Används ej just nu, men ni kan använda de senare
     public int score { get; private set; } = 0;
     public int lives { get; private set; } = 3;
+    int wave = 0;
 
     private void Awake()
     {
@@ -60,6 +69,8 @@ public class GameManager : MonoBehaviour
 
         lEdge = cam.ViewportToWorldPoint(Vector3.zero).x;
         rEdge = cam.ViewportToWorldPoint(Vector3.right).x;
+
+        bossMissileThing = FindObjectOfType<BossThing>();
     }
 
     private void OnDestroy()
@@ -145,7 +156,36 @@ public class GameManager : MonoBehaviour
                 NewRound();
             }
             else
+            {
                 roundText.gameObject.SetActive(true);
+
+                if (infiniteMode)
+                    roundText.text = "Wave " + (wave+1);
+                else
+                {
+                    if(wave == 5)
+                        roundText.text = "You finished the game. The little baby game. Are you proud?";
+                    else
+                        roundText.text = "Wave " + (wave + 1) + "/5";
+                }
+            }
+        }
+
+        if (boss)
+        {
+            bossThingTimer -= Time.deltaTime;
+            if(bossThingTimer <= 0f)
+            {
+                bossThingTimer = Random.Range(10f, 15f);
+                bossMissileThing.StartFalling();
+            }
+
+            if(bossFade < 1f)
+            {
+                bossFade = Mathf.Min(bossFade + Time.deltaTime * 0.2f, 1f);
+                overlay.color = new Color(28f / 255f, 19f / 255f, 58f / 255f, bossFade * 0.5f);
+                overlay2.color = new Color(1f, 1f, 1f, bossFade * 0.3f);
+            }
         }
     }
 
@@ -158,8 +198,23 @@ public class GameManager : MonoBehaviour
 
     private void NewRound()
     {
-        invaders.ResetInvaders();
-        invaders.gameObject.SetActive(true);
+        wave++;
+        boss = (wave == 5 && !infiniteMode);
+        if (wave > 5 && !infiniteMode)
+        {
+            SceneManager.LoadScene(0);
+            return;
+        }
+
+        if (!boss)
+        {
+            invaders.ResetInvaders();
+            invaders.gameObject.SetActive(true);
+        }
+        else
+        {
+            invaders.SpawnBoss();
+        }
 
         for (int i = 0; i < bunkers.Length; i++)
         {
@@ -228,10 +283,17 @@ public class GameManager : MonoBehaviour
         killPlayer = true;
     }
 
-    public void OnInvaderKilled(Invader invader)
+    public void OnInvaderKilled(Invader invader, bool deathByBeingConsumed = false)
     {
         deactivationList.Add(invader.gameObject);
+
+        if (deathByBeingConsumed)
+            eatingSound.pitch = Random.Range(0.5f, 0.9f);
+        else
+            eatingSound.pitch = Random.Range(0.8f, 1.2f);
         eatingSound.Play();
+
+
         Freeze(0.05f);
         invader.Shake(0.05f, 0.5f, 0f);
     }
@@ -258,7 +320,10 @@ public class GameManager : MonoBehaviour
 
         if (invaders.GetInvaderCount() == 0 && roundTimer <= 0f)
         {
-            roundTimer = 1f;
+            if (wave == 5 && !infiniteMode)
+                roundTimer = 5f;
+            else
+                roundTimer = 2.4f;
         }
     }
 
@@ -305,5 +370,10 @@ public class GameManager : MonoBehaviour
     public void Move(Vector2 newPos)
     {
         positionTo = newPos;
+    }
+
+    public void CreateHitEffect(Vector2 pos) // Enklaste grejen någonsin
+    {
+        Destroy(Instantiate(hitEffect, pos, Quaternion.identity), 0.17f);
     }
 }

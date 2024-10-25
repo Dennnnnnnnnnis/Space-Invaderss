@@ -21,6 +21,9 @@ public class Invader : MonoBehaviour
     private float shkTime, shkMag, shkDrop;
     public float squash = 0f, targetSquash = 0f;
 
+    public bool isBoss = false;
+    [HideInInspector] public int hp = 100;
+
     private void Awake()
     {
         spRend = GetComponentInChildren<SpriteRenderer>();
@@ -78,7 +81,15 @@ public class Invader : MonoBehaviour
     {
         if(collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
-            GameManager.Instance.OnInvaderKilled(this);
+            if(isBoss)
+            {
+                hp--;
+                Shake(0.1f, 0.1f, 1f);
+                if(hp <= 0)
+                    GameManager.Instance.OnInvaderKilled(this);
+            }
+            else
+                GameManager.Instance.OnInvaderKilled(this, collision.GetComponent<Laser>().indestructable);
         }
         else if(collision.gameObject.layer == LayerMask.NameToLayer("Boundary")) //nått nedre kanten
         {
