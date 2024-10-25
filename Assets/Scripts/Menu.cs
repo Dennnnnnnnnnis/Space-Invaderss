@@ -16,15 +16,19 @@ public class Menu : MonoBehaviour
     {
         
     }
+    //när knappen trycks på ökar scenen med 1, villket tar en till huvudspelet
     public void PlayGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
+    //ökar scenen med 2 och tar en till 3d-spelet
     public void Play3DGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
     }
+
+    //stänger av spelet
     public void QuitGame()
     {
         Application.Quit();
