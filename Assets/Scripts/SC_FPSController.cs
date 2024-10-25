@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class SC_FPSController : MonoBehaviour
 {
+    public int rabbitCount = 4;
     public float walkingSpeed = 7.5f;
     public float runningSpeed = 11.5f;
     public float jumpSpeed = 8.0f;
@@ -20,13 +22,13 @@ public class SC_FPSController : MonoBehaviour
     Vector3 moveDirection = Vector3.zero;
     float rotationX = 0;
 
+
     [HideInInspector]
     public bool canMove = true;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
