@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
         print(playingAudio);
         if (controllable)
         {
+            // Jag ändrade lite kod här, men det fungerar likadant
             float move = Mathf.Clamp(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime + transform.position.x, GameManager.Instance.lEdge, GameManager.Instance.rEdge) - transform.position.x;
 
             transform.position += move * Vector3.right;
@@ -59,6 +60,8 @@ public class Player : MonoBehaviour
             {
                 throwingAudio.Play();
                 shootParticles.Play();
+
+                // Skjuter en stor eller liten laser
                 if(bigLasers <= 0)
                 {
                     GameManager.Instance.Shake(0.2f, 0.1f, 0.1f);
@@ -73,6 +76,8 @@ public class Player : MonoBehaviour
                     bigLasers--;
                 }
             }
+
+            // Spela ljud när man går
             if (Input.GetAxisRaw("Horizontal") != 0 && playingAudio == false)
             {
                 walkingAudio.Play();
@@ -85,7 +90,7 @@ public class Player : MonoBehaviour
             }
         }
 
-
+        // Skaka spelaren, se GameManager för mer om det
         if (shkTime > 0)
         {
             shkTime -= Time.deltaTime;
@@ -98,12 +103,14 @@ public class Player : MonoBehaviour
             shkMag -= shkDrop * Time.deltaTime;
         }
 
+        // Mosar ihop spelaren
         transform.localScale = new Vector3(squash > 0 ? Mathf.Abs(squash) + 1 : (1f / (Mathf.Abs(squash) + 1)), squash < 0 ? Mathf.Abs(squash) + 1 : (1f / (Mathf.Abs(squash) + 1)), 1);
         if (squash != 0)
         {
             squash = Mathf.Max(Mathf.Abs(squash - targetSquash) - Time.deltaTime * 4f, 0) * Mathf.Sign(squash - targetSquash) + targetSquash;
         }
 
+        // Immunitet
         if(immunityTimer > 0)
         {
             immuneEffect.SetActive(true);
@@ -124,6 +131,8 @@ public class Player : MonoBehaviour
                 GameManager.Instance.OnPlayerKilled(this);
             }
         }
+
+        // Powerups
         if (collision.tag == "borste")
         {
             Destroy(collision.gameObject);
@@ -136,7 +145,7 @@ public class Player : MonoBehaviour
         }
     }
 
-
+    // Skakar spelaren, se GameManager
     public void Shake(float shakeTime, float shakeMagnitude, float shakeDropoff)
     {
         if (shkTime <= 0 || shakeMagnitude > shkMag)
@@ -147,6 +156,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // Spelar voicelines beroende på hur realistiskt det är
     public void PlayVoiceLine(int ln = -1)
     {
         if (Random.Range(0f, 1f) > realism)

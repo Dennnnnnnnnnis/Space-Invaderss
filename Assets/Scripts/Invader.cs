@@ -39,10 +39,12 @@ public class Invader : MonoBehaviour
 
     private void Update()
     {
+        // Finns för att röra invaders up och ner långsamt och lite
         offsetTimer += Time.deltaTime * 3f;
         if (offsetTimer > 360f)
             offsetTimer -= 360f;
 
+        // Skakar invader, se GameManager
         if (shkTime > 0)
         {
             shkTime -= Time.deltaTime;
@@ -59,6 +61,7 @@ public class Invader : MonoBehaviour
             spRend.transform.localPosition = Vector3.up * Mathf.Sin(offsetTimer) * 0.1f;
         }
 
+        // Mosar invader
         transform.localScale = new Vector3((squash > 0 ? Mathf.Abs(squash) + 1 : (1f / (Mathf.Abs(squash) + 1))) * facingDir, squash < 0 ? Mathf.Abs(squash) + 1 : (1f / (Mathf.Abs(squash) + 1)), 1);
         if (squash != 0)
         {
@@ -83,6 +86,7 @@ public class Invader : MonoBehaviour
         {
             if(isBoss)
             {
+                // Bossen har liv som försvinner istället för att bara dö
                 hp--;
                 Shake(0.1f, 0.1f, 1f);
                 if(hp <= 0)
@@ -97,6 +101,7 @@ public class Invader : MonoBehaviour
         }
     }
 
+    // Skakar invader, se GameManager
     public void Shake(float shakeTime, float shakeMagnitude, float shakeDropoff)
     {
         if (shkTime <= 0 || shakeMagnitude > shkMag)

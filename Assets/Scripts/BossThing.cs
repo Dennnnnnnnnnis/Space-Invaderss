@@ -20,9 +20,11 @@ public class BossThing : MonoBehaviour
     {
         if (isFalling)
         {
+            // Faller ner och åker fram och tillbaka
             fallDist += Time.deltaTime * 0.6f;
             transform.position = new Vector2(Mathf.Sin(Mathf.Deg2Rad * (fallDist * 80f % 360)) * 10, 16 - fallDist);
 
+            // Om den är för lågt ner så försvinner den
             if(fallDist > 32f / 0.6f)
             {
                 isFalling = false;
@@ -36,6 +38,7 @@ public class BossThing : MonoBehaviour
         if (isFalling)
             return;
 
+        // Börja falla
         isFalling = true;
         fallDist = 0;
     }
@@ -44,6 +47,7 @@ public class BossThing : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
+            // Aktivera missilen när den blir träffad
             BossMissile mis = Instantiate(carrotMissile, transform.position, transform.rotation);
             mis.target = bossInvader;
 

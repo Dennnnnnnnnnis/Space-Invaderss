@@ -113,6 +113,7 @@ public class Invaders : MonoBehaviour
         }
         else
         {
+            // Boss attacker
             float rand = UnityEngine.Random.value;
             if(rand < 0.5f)
             {

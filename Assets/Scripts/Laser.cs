@@ -30,6 +30,7 @@ public class Laser : Projectile
 
         if(bunker == null) //Om det inte är en bunker vi träffat så ska skottet försvinna.
         {
+            // Ändrar beteende beroende på om det är tänder eller inte
             if(!indestructable || collision.gameObject.layer == 10)
             {
                 if (indestructable)
